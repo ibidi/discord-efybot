@@ -1,0 +1,45 @@
+const { Command } = require('discord.js-commando');
+const request = require("request");
+const fetch = require('node-fetch');
+const Discord = require('discord.js');
+
+module.exports = class UserInfoCommand extends Command {
+    constructor(client) {
+        super(client, {
+            name: 'wb-oluştur',
+            group: 'sunucu',
+            memberName: 'wb-oluştur',
+                      throttling: {
+                 usages: 1,
+                 duration: 3,
+             },
+            description: 'Komutu kullandığınız kanalda bir webhook oluşturursunuz. **YENI**',
+			      args: [
+				     {
+					      key: 'name',
+					      label: 'webhook adı',
+					      prompt: 'Oluşturmak istediğiniz webhook\'un adı nedir?\n',
+					      type: 'string'
+				      }
+			      ]
+        });
+    }
+
+    async run(msg, { name }) {
+      
+        msg.channel.createWebhook(name, msg.guild.iconURL)
+				.then(wb => {
+					this.client.provider.set(msg.guild.id, 'WebhookHToken', wb.token);
+					this.client.provider.set(msg.guild.id, 'WebhookHID', wb.id);
+          
+          this.client.users.get(msg.author.id).send(this.client.bilgiler.evet+"Webhook oluşturuldu.\n	 - **ID:** " + wb.id + "\n	 - **Token:** " + wb.token + "\n\nHızlı kullanım: https://www.glynet.com/api/applications/efy/sendMessage?id=" + wb.id + "&token=" + wb.token + "");
+          msg.channel.send(this.client.bilgiler.evet+" Webhook'u başarıyla oluşturdum.")
+        }).catch(err => {
+          if (err == "DiscordAPIError: Maximum number of webhooks reached (10)") {
+            msg.channel.send(this.client.bilgiler.hayir + " Bu kanalda daha fazla webhook açamıyorum!")
+          } else {
+            msg.channel.send("Hata: " + err)
+          }
+        })
+    }
+}

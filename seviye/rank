@@ -1,0 +1,122 @@
+const { Command } = require('discord.js-commando');
+const Discord = require('discord.js');
+const { MessageAttachment } = require('discord.js');
+const { get } = require('snekfetch');
+const { Canvas } = require('canvas-constructor');
+
+
+module.exports = class SearchDiscordBotCommand extends Command {
+	constructor(client) {
+		super(client, {
+			name: 'rank',
+			group: 'sunucu',
+			memberName: 'rank',
+			description: "Profil kartınızı gösterir.",
+			guildOnly: false,
+			guarded: false,
+            args: [{
+                    key: 'user',
+                    label: 'üye',
+                    prompt: 'Kime rol vermek istiyorsun?',
+                    type: 'member'
+                }
+            ]
+    });
+	}
+
+	async run(msg, args) { // dc kapandı aq
+  const user = args.user;
+  const member = msg.guild.members.get(user.id)
+  const xp = this.client.provider.get(user.id+msg.guild.id, + 'xp', []) || "Bilinmiyor"
+  const rank = this.client.provider.get(user.id+msg.guild.id, + 'rank', []) || "Bilinmiyor"
+  const rep = this.client.provider.get(user.id+msg.guild.id, + 'rep', []) || "Bilinmiyor"
+  const xpsays = Number(xp);
+  if(user.user.bot === true) return msg.channel.send("Botların rütbesi olamaz!")
+  const rankk = msg.guild.roles.find(r=>r.id===rank) || {id:"Bilinmiyor"}
+  var sira = ''
+	const sorted = msg.guild.members.filter(m=>!m.user.bot).array().sort((a, b) => { return (this.client.provider.get(user.id+msg.guild.id, + 'xp', []) || 0) - (this.client.provider.get(user.id+msg.guild.id, + 'xp', []) || 0) });
+	const top10 = sorted.splice(0, msg.guild.members.size)
+	const mappedID = top10.map(s => s.user.id);
+	for(var s = 0; s < msg  .guild.members.size; s++) {
+		if(mappedID[s] === user.id) {
+			sira += `#${s+1}   `
+    }
+  }
+  
+  const embed = new Discord.RichEmbed()
+  .setAuthor(member.nickname === null ? member.user.username : member.user.username + " - " + member.nickname)
+  .setColor("#65cafe")
+  .addField("XP", xpsays, true)
+  embed.setDescription("Sıralama" + ": " + rank, true)
+  embed.setDescription("Rep" + ": " + rep, true)
+  msg.channel.send(embed)
+  return
+};
+
+  };
+
+/*
+const db = require("quick.db")
+
+module.exports = async (client, message) => {
+  var prefix = db.fetch(`${message.guild.id}.prefix`) || client.ayarlar.prefix
+  if (message.author.bot) return;
+  const xp = 3
+  db.add(message.author.id+"."+message.guild.id+".xpp", xp)
+  if(!message.guild) return;
+  let m = message;
+  
+  if (db.has(`${m.guild.id}.xpRole`) === true) {
+    let x = Object.keys(db.fetch(`${m.guild.id}.xpRole`))
+    x.forEach(veri => {
+      if (db.fetch(`${m.author.id}.${m.guild.id}.xpp`) >= db.fetch(`${m.guild.id}.xpRole.${veri}`)) {
+      
+        if (m.member.roles.has(veri) === true) return// bu kısım ne
+        else {
+          if(db.has(m.guild.id+".oneXProle") === true) {
+            if(db.has(m.author.id+"."+m.guild.id+".rank")) {
+              m.member.removeRole(m.guild.roles.find(r=>r.name===`${db.fetch(m.author.id+"."+m.guild.id+".rank")}`))
+              m.member.addRole(m.guild.roles.get(`${veri}`))
+            } else {
+              m.member.addRole(m.guild.roles.get(`${veri}`)).catch(err => {
+                return;
+              })
+            }
+          } else {
+            m.member.addRole(m.guild.roles.get(`${veri}`)).catch(err => {
+                return;
+              })
+          }
+          db.set(m.author.id+"."+m.guild.id+".rank", m.guild.roles.get(`${veri}`).id)
+          return m.channel.send("{emoji} Tebrikler **{user}**! Şu anki rütben **{role}**.".replace("{emoji}", ":up:").replace("{user}", m.author.tag).replace("{role}", m.guild.roles.get(`${veri}`).name))
+
+        };
+      if (db.fetch(`${m.author.id}.${m.guild.id}.xpp`) < db.fetch(`${m.guild.id}.xpRole.${veri}`)) {
+      
+        if (m.member.roles.has(veri) === true) return// bu kısım ne
+        else {
+          if(db.has(m.guild.id+".oneXProle") === true) {
+            if(db.has(m.author.id+"."+m.guild.id+".rank")) {
+              m.member.addRole(m.guild.roles.find(r=>r.name===`${db.fetch(m.author.id+"."+m.guild.id+".rank")}`))
+              m.member.removeRole(m.guild.roles.get(`${veri}`))
+            } else {
+              m.member.removeRole(m.guild.roles.get(`${veri}`)).catch(err => {
+                return;
+              })
+            }
+          } else {
+            m.member.removeRole(m.guild.roles.get(`${veri}`)).catch(err => {
+                return;
+              })
+          }
+          db.delete(m.author.id+"."+m.guild.id+".rank")
+          return m.channel.send("**{user}**, **{role}** rolü için gerekli XP'nin altına düştüğün için rolün geri alındı.".replace("{user}", m.author.tag).replace("{role}", m.guild.roles.get(`${veri}`).name))
+
+        };
+        
+      };
+      };
+    });
+  };
+  
+}*/

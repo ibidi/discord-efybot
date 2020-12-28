@@ -1,0 +1,37 @@
+const { Command } = require('discord.js-commando');
+const Discord = require("discord.js")
+
+module.exports = class JoinRoleCommand extends Command {
+	constructor(client) {
+		super(client, {
+			name: 'rol-kaldır',
+			aliases: [],
+			group: 'sunucu',
+			memberName: 'rol-kaldır',
+			description: 'Bir rolü kaldırmanızı sağlar.',
+			guildOnly: true,
+			throttling: {
+				usages: 1,
+				duration: 6
+			},
+
+			args: [
+				{
+					key: 'rol',
+					prompt: "Hangi rolü silmemi istersin?\n",
+					type: 'role',
+				}
+			]
+		});
+	}
+	
+	hasPermission(message) {
+		return this.client.isOwner(message.author) || message.member.hasPermission("ADMINISTRATOR")
+	}
+
+	async run(msg, args) {
+
+		msg.guild.roles.find(`name`, args.rol.name).delete()
+		msg.say(`:ok_hand: ${args.rol} adlı rol başarılı bir şekilde kaldırıldı.`)
+	
+	}}

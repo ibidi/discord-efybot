@@ -1,0 +1,48 @@
+const { Command } = require('discord.js-commando');
+const request = require("request");
+const fetch = require('node-fetch');
+const Discord = require('discord.js');
+
+module.exports = class UserInfoCommand extends Command {
+    constructor(client) {
+        super(client, {
+            name: 'glynet',
+            group: 'glynet',
+            memberName: 'glynet',
+                      throttling: {
+                 usages: 1,
+                 duration: 3,
+             },
+            description: 'Glynet\'te kayıtlı olan bir kullanıcının bilgilerini verir.',
+			      args: [
+				     {
+					      key: 'username',
+					      label: 'user',
+					      prompt: 'Bir kullanıcı adı girin (e.g: glynet)\n',
+					      type: 'string'
+				      }
+			      ]
+        });
+    }
+
+    async run(message, { username }) {
+        
+      
+        const glynet = await fetch(`glynetapi`)
+            .then(response => response.json())
+            .catch(() => { message.say(`Can't find anything with that name.`) });
+        if(glynet.name === "") return message.say(`:lock: Böyle bir kullanıcı yok!`)
+        
+        if (glynet.verified == "1") { var verifiedcontrol = "Onaylı" } else { var verifiedcontrol = "Onaylı değil" }
+      
+        const embed = new Discord.RichEmbed()
+          .setColor(glynet.color)
+          .setAuthor("Glynet", "https://images-ext-1.discordapp.net/external/4PHtJV9vZ70VQrgDZ-V0P022REn3c1JUU96PL6qpmFQ/https/www.glynet.com/cdn/logo.png?width=473&height=473")
+          .setDescription("Glynet, sosyal medyaya yeni bir bakış projesiyle sizlere hizmet vermeye başlamıştır. Bu veriler **glynet.com** üzerinden alınmaktadır.")
+          .addField("Kullanıcının Glynet Bilgileri", `• **Adı:** ${glynet.name}\n• **Kullanıcı adı:** ${username}\n• **Discrim:** ${glynet.discriminator}\n• **Biyografi:** ${glynet.bio}\n• **Takipçi sayısı:** ${glynet.followers}\n• **Takip ettiği kişi sayısı:** ${glynet.followings}\n• **Gönderi sayısı:** ${glynet.posts}\n• **Onaylı kişi mi?:** ${verifiedcontrol}`)
+        	.setThumbnail(glynet.avatar)
+        message.embed(embed)
+        
+
+    }
+};

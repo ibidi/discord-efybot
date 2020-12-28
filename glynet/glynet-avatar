@@ -1,0 +1,47 @@
+const { Command } = require('discord.js-commando');
+const request = require("request");
+const fetch = require('node-fetch');
+const Discord = require('discord.js'); // maga 2 dk şu müzik komutunu da el at be
+
+module.exports = class UserInfoCommand extends Command {
+    constructor(client) {
+        super(client, {
+            name: 'glynet-avatar',
+            group: 'glynet',
+            memberName: 'glynet-avatar',
+                      throttling: {
+                 usages: 1,
+                 duration: 3,
+             },
+            description: 'Glynet\'te aramış olduğunuz kullanıcının avatarını gösterir.',
+			      args: [
+				     {
+					      key: 'username',
+					      label: 'user',
+					      prompt: 'Hangi kullanıcının Glynet profil fotoğrafını görmek istiyorsun? (e.g: glynet)\n',
+					      type: 'string'
+				      }
+			      ]
+        });
+    }
+
+    async run(message, { username }) {
+        
+        let kullanıcı =  message.author
+
+        const glynet = await fetch(`glynetapi`)
+            .then(response => response.json())
+            .catch(() => { message.say(`Can't find anything with that name.`) });
+        if(glynet.name === "") return message.say(`:lock: Böyle bir kullanıcı yok!`)
+        
+        if (glynet.verified == "1") { var verifiedcontrol = "Onaylı" } else { var verifiedcontrol = "Onaylı değil" }
+      
+        const embed = new Discord.RichEmbed()
+          .setColor(glynet.color)
+          .setDescription(`**[${glynet.username}](${glynet.avatar})** adlı kişinin avatarı`)
+        	.setImage(glynet.avatar)
+        message.channel.send(embed)
+        
+
+    }
+};

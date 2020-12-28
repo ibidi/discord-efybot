@@ -1,0 +1,38 @@
+const { Command } = require('discord.js-commando');
+const request = require("request");
+const fetch = require('node-fetch');
+const Discord = require('discord.js');
+
+module.exports = class UserInfoCommand extends Command {
+    constructor(client) {
+        super(client, {
+            name: 'glynet-post',
+            group: 'glynet',
+            memberName: 'glynet-post',
+                      throttling: {
+                 usages: 1,
+                 duration: 3,
+             },
+            description: 'Glynet\'te aramış olduğunuz olan postu verir.',
+			      args: [
+				     {
+					      key: 'word',
+					      label: 'word',
+					      prompt: 'Aranacak kelimeyi girin.\n',
+					      type: 'string'
+				      }
+			      ]
+        });
+    }
+
+    async run(message, { word }) {        
+      
+        const glynet = await fetch(`glynetapi`)
+            .then(response => response.json())
+            .catch(() => { message.say(`Can't find anything with that name.`) });
+        if(glynet.name === "") return message.say(`:lock: Hiç bir şey bulamadım!`)
+
+        message.channel.send(glynet.link)
+
+    }
+};

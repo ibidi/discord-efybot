@@ -1,0 +1,49 @@
+const commando = require('discord.js-commando');
+const Discord = require("discord.js");
+const request = require("request");
+var apikey = "efy_d4hA7CjE31xEEee.47";
+const fetch = require("node-fetch")
+
+module.exports = class NewsForEfy extends commando.Command {
+    constructor(client) {
+        super(client, {
+            name: 'glynet-haber',
+            group: 'glynet',
+            memberName: 'glynet-haber',
+            description: 'Glynet\'te bir haberi aramış olursunuz.',
+            guildOnly: false,
+            throttling: {
+                 usages: 2,
+                 duration: 3
+             },
+
+            args: [
+                {
+                    key: 'text',
+                    label: 'text',
+                    prompt: 'Hangi haberi glynet üzerinden aramak istiyorsun?',
+                    type: 'string'
+                }
+            ]
+        });
+    }
+  
+    async run(msg, args) {
+        const query = args.text;
+        
+        const glynet = await fetch(`glynetapi`)
+        .then(response => response.json()).catch(() => { 
+            console.log('Bir şey bulamadım')
+        });
+
+        if (glynet.title === "") return msg.channel.send(":newspaper: Böyle bir haber yayınlanmamış!")
+      
+        const embed = new Discord.RichEmbed()
+        .setTitle(glynet.title)
+        .setDescription(glynet.content)
+        .setImage(glynet.thumbnail)
+        .setColor("#FFFFFF")
+        .addField("Habere git", "[Tıkla](https://www.glynet.com/news/" + glynet.url_key + ")")
+        return msg.channel.send(embed)
+	  };
+};

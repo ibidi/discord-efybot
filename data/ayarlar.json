@@ -1,0 +1,7 @@
+{
+    "sahipler": ["ownerid"],
+    "prefix": "!",
+    "nodes": [
+        { "host": "localhost", "port": 3030, "password": "youshallnotpass" }
+    ]
+}

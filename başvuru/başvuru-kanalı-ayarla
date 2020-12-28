@@ -1,0 +1,44 @@
+const { Command } = require('discord.js-commando');
+
+module.exports = class basvuruK extends Command {
+    constructor(client) {
+        super(client, {
+            name: 'başvuru-kanalı-ayarla',
+            aliases: ['başvurukanal'],
+            group: 'başvuru',
+            memberName: 'başvuru-kanalı-ayarla',
+            description: 'Başvuruların gönderileceği kanalı ayarlamanızı sağlar',
+            guildOnly: true,
+			throttling: {
+                usages: 3,
+                duration: 5
+            },
+            args: [
+                {
+                    key: 'kanal',
+                    prompt: 'Kullanıcı başvuruları hangi kanala gönderilsin? (#kanalismi)',
+                    type: 'channel'
+                }
+            ]
+        });
+    }
+    
+    hasPermission(msg) {
+        if(!msg.guild) return this.client.isOwner(msg.author);
+        return this.client.isOwner(msg.author) || msg.member.hasPermission('ADMINISTRATOR');
+    }
+    
+
+    async run(message, args) {
+        const vt = this.client.provider.get(message.guild.id, 'başvuruKanal', []);
+			const db = this.client.provider.get(message.guild.id, 'başvuruKanalOnay', []);
+			if (vt === args.kanal.id) {
+				this.client.provider.set(message.guild.id, 'başvuruKanalOnay', true);
+				message.channel.send(`:lock: Başvuru kanalı zaten <#${args.kanal.id}> adlı kanal olarak ayarlı!`);
+			} else {
+				this.client.provider.set(message.guild.id, 'başvuruKanal', args.kanal.id);
+				this.client.provider.set(message.guild.id, 'başvuruKanalOnay', true);
+				return message.channel.send(`:ok_hand: Başvuru kanalı <#${args.kanal.id}> kanalı olarak ayarlandı.`);
+			}
+    }
+};

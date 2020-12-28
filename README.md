@@ -1,2 +1,1 @@
-# discord-efybot
-Türkiyenin en gelişmiş Discord Botu 
+ibd

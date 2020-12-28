@@ -1,0 +1,10 @@
+{
+    "hasPerm": "MANAGE_MESSAGES",
+    "botLogo": "https://cdn.discordapp.com/avatars/635442486084501534/3737c2d3635ea0d0369f770d940e41e1.png?size=2048",
+
+    "statusOnline": "<:online:595264344904695838>",
+    "statusOffline": "<:cevrimdisi:595651949110493224>",
+    "statusIdle": "<:bosta:595264589575487499>",
+    "statusDnD": "<:rahatsizetmeyin:595651441612292109>",
+    "playingStatusChange": "<:OwO:592776288499138599>"
+}

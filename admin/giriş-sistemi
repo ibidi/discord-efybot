@@ -1,0 +1,29 @@
+const { Command } = require('discord.js-commando');
+const Discord = require('discord.js');
+
+module.exports = class NPMCommand extends Command {
+	constructor(client) {
+		super(client, {
+			name: 'giriş-sistemi-ibdtoibd',
+			group: 'bilgi',
+			memberName: 'giriş-sistemi-ibdtoibd',
+      				aliases: [],
+			description: 'Bot hakkında bilgiler verir.',
+			examples: [],
+			guildOnly: true,
+			guarded: true,
+		});
+	}
+
+	async run(msg, args) {
+  const embed = new Discord.RichEmbed()
+  	.setAuthor(`ibd Bot Sunucusuna Hepiniz Hoşgeldiniz`)
+    .setDescription(`Öncelikle sunucumuza hepiniz hoşgeldiniz, burada botumuz ile ilgili şeyleri bulabilirsiniz. Sunucumuza giriş yapabilmeniz için öncelikle aşağıda bulunan :unlock: tepkisine tıklaması gerekiyor.
+
+Bu koruma sistemini yapmamızın sebebi ise sunucumuzu gelecek olan saldırılara karşı korunması için yapılmıştır.`)
+  	.setFooter(`Bu sistem ibd Bot Sunucusuna özel yapılmıştır.`)
+    .setColor('#65cafe')
+	return msg.embed(embed);
+
+}
+}

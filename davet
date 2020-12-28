@@ -1,0 +1,42 @@
+const invites = {};
+
+const wait = require('util').promisify(setTimeout);
+
+client.on('ready', () => {
+
+  wait(1000);
+
+  client.guilds.forEach(g => {
+    g.fetchInvites().then(guildInvites => {
+      invites[g.id] = guildInvites;
+    });
+  });
+});
+
+client.on('guildMemberAdd', member => {
+  try{
+  if (db.has(`davetChannel_${member.guild.id}`) === true) {
+  member.guild.fetchInvites().then(guildInvites => {
+   if (member.user.bot) return
+    const ei = invites[member.guild.id];
+    
+    invites[member.guild.id] = guildInvites;
+   
+    const invite = guildInvites.find(i => ei.get(i.code).uses < i.uses);
+    
+    const inviter = client.users.get(invite.inviter.id);
+   
+    const kanal = member.guild.channels.get(db.fetch(`davetChannel_${member.guild.id}`));
+ 
+    kanal.send(`\`${member.user.tag}\` adlı kullanıcı \`${inviter.tag}\` adlı kullanıcının ${invite.code} linkine sahip daveti ile sunucuya katıldı! (Kullanıcı ${invite.uses} kişi davet etmiş!)`);
+  
+
+   
+  });
+  } else {
+    return
+  }
+  } catch(err) {
+    return
+  }
+});

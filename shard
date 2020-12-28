@@ -1,0 +1,6 @@
+app.listen(25000);
+const { ShardingManager } = require('discord.js');
+const manager = new ShardingManager('./server.js', { token: "token" });
+console.log("| |/ /__ _ __| |_ (_)_ __  __ _\n| ' </ _` (_-< ' \\| | '  \\/ _` |\n|_|\\_\\__,_/__/_||_|_|_|_|_\\__,_|\n");
+const shards = 1;
+manager.spawn(shards, true);

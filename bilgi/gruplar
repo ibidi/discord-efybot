@@ -1,0 +1,36 @@
+const stripIndents = require('common-tags').stripIndents;
+const commando = require('discord.js-commando');
+const Discord = require('discord.js');
+
+module.exports = class ListGroupsCommand extends commando.Command {
+	constructor(client) {
+		super(client, {
+			name: 'gruplar',
+			aliases: ['list-groups', 'show-groups'],
+			group: 'bilgi',
+			memberName: 'gruplar',
+			description: 'Tüm komut gruplarını listeler.',
+			guarded: true
+		});
+	}
+
+	hasPermission(msg) {
+		if(!msg.guild) return this.client.isOwner(msg.author);
+		return this.client.isOwner(msg.author) || msg.member.hasPermission('ADMINISTRATOR');
+	}
+
+	async run(msg) {
+		const embed = new Discord.RichEmbed()
+		.setColor('RANDOM')
+		.setTitle('__**Gruplar**__')
+		.setDescription(stripIndents`
+			${this.client.registry.groups.map(grp =>
+				`**${grp.name}:** ${grp.isEnabledIn(msg.guild) ? 'Devrede' : 'Devre dışı'}`
+			).join('\n')}
+		`)
+		.setFooter(`${msg.author.tag} tarafından istendi`, this.client.user.avatarURL)
+		.setTimestamp();
+		
+		return msg.channel.send({embed});
+	}
+};

@@ -1,0 +1,57 @@
+	const { Command } = require('discord.js-commando')
+const Discord = require("discord.js")
+	const moment = require("moment");
+	require("moment-duration-format");
+
+	module.exports = class CoinFlipCommand extends Command {
+		constructor(client) {
+			super(client, {
+				name: 'shard',
+				group: 'bilgi',
+				memberName: 'shard',
+				aliases: [],
+				description: 'Botun istatistiklerini gösterir.',
+			throttling: {
+                usages: 3,
+                duration: 5
+            },
+			});
+		}
+    
+		async run (message, args) {
+	const m = message
+  const msg = m
+	const pings1 = await this.client.shard.fetchClientValues("ping").then(x => x[0])
+	const pings2 = await this.client.shard.fetchClientValues("ping").then(x => x[1])
+	if(pings1 <= 150) {
+		var x = "<:efyStatusOnline:647922942684037160>"
+	}    
+	if(pings1 >= 151) {
+			var x = "<:efyStatusIdle:647922976548847640>"
+	}
+	if(pings1 >= 301) {
+			var x = "<:efyStatusDnd:647922942922981386>"
+	}
+
+	if(pings2 <= 150) {
+			var y = "<:efyStatusOnline:647922942684037160>"
+	}    
+	if(pings2 >= 151) {
+			var y = "<:efyStatusIdle:647922976548847640>"
+	}
+	if(pings2 >= 301) {
+			var y = "<:efyStatusDnd:647922942922981386>"
+	}
+	const embed = new Discord.RichEmbed()
+	.addField("Shard 1 "+x, `Sunucu sayısı: ${await this.client.shard.fetchClientValues("guilds.size").then(x => x[0])}
+Kanal sayısı: ${await this.client.shard.fetchClientValues("channels.size").then(x => x[0])}
+Kullanıcı sayısı: ${await this.client.shard.fetchClientValues("users.size").then(x => x[0])}
+Ping: ${parseInt(pings1)}`, true)
+  	.addField("Shard 2 "+y, `Sunucu sayısı: ${await this.client.shard.fetchClientValues("guilds.size").then(x => x[1])}
+Kanal sayısı: ${await this.client.shard.fetchClientValues("channels.size").then(x => x[1])}
+Kullanıcı sayısı: ${await this.client.shard.fetchClientValues("users.size").then(x => x[1])}
+Ping: ${parseInt(pings2)}`, true)
+	.setColor("7289DA")
+	msg.channel.send(embed)
+}
+  }

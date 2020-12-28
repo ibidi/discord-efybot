@@ -4,6 +4,7 @@ Herkese merhabalar, aldığım bir karar ile tüm botlarımı sizlerle paylaşma
 # Komutlar
 
 Evet botumda birden fazla komut ve grupları bulunmaktadır. Sizlerle onlara bir göz atalım;
+
 **Genel Komutlar:**
 
 Aslında şöyle bir başlangıç yapmam gerekirse, bot istediğiniz her şeyi kayıt eder. Sunucuzda olup bitenleri kaydederken,
@@ -12,6 +13,7 @@ yapılması gereken şeylerden birisi komut gruplarındaki hataları bulup düze
 kolay bir şekilde çekerek sizlere aktarıyor.
 
 Komut grupları hakkında detaylı bilgi almak için `!yardım` komutunu kullanabilirsiniz.
+
 **Müzik Komutları:**
 
 Müzik sistemine gelirsek bu sistemi kurmak için birden fazla yöntem var. İsterseniz lavalink isterseniz de ytdl-core kullanabilirsiniz.

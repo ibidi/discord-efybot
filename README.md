@@ -1,5 +1,5 @@
 # Discord EfyBot
-Herkese merhabalar, aldığım bir karar ile tüm botlarımı sizlerle paylaşma kararı aldım. Benimle ilgili daha fazla bilgi için insternet sitemi takip edebilirsiniz. <a href="https://ibidi.dev">Buraya tıkla</a>!
+Herkese merhabalar, aldığım bir karar ile tüm botlarımı sizlerle paylaşma kararı aldım. Benimle ilgili daha fazla bilgi için internet sitemi takip edebilirsiniz. <a href="https://ibidi.dev">Buraya tıkla</a>!
 
 # Komutlar
 
